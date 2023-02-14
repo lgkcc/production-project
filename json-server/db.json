@@ -1,0 +1,38 @@
+{
+  "posts": [
+    {
+      "id": "1",
+      "title": "json-server",
+      "userId": "1"
+    },
+    {
+      "id": "2",
+      "title": "json-server",
+      "userId": "2"
+    }
+  ],
+  "comments": [
+    {
+      "id": "1",
+      "body": "some comment",
+      "postId": "1"
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "username": "admin",
+      "password": "123"
+    }
+  ],
+  "profile": {
+    "first": "lgkcc",
+    "lastname": "lgkcc",
+    "age": 2211,
+    "currency": "EUR",
+    "country": "Russia",
+    "city": "Юрга",
+    "username": "admin213",
+    "avatar": "https://natalyland.ru/wp-content/uploads/e/6/b/e6bc07798fadfaf768b2ec1b6f5585c2.jpeg"
+  }
+}
