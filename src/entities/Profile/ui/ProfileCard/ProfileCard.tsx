@@ -9,7 +9,7 @@ import { CurrencySelect } from 'entities/Currency';
 import { Country } from 'entities/Country/model/types/country';
 import { CountrySelect } from 'entities/Country';
 import cls from './ProfileCard.module.scss';
-import { Profile } from '../../model/types/profile';
+import { Profile, ValidateProfileError } from '../../model/types/profile';
 
 interface ProfileCardProps {
     className?: string;

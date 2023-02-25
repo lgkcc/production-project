@@ -11,5 +11,11 @@
   "Ваш возраст": "Your age",
   "Имя пользователя": "Username",
   "Введите имя пользователя": "Input username",
-  "Введите ссылку на аватар": "Input avatar link"
+  "Введите ссылку на аватар": "Input avatar link",
+  "Ошибка сервера": "Server error",
+  "Некорректная страна": "Incorrect country",
+  "Некорректный возраст": "Incorrect age",
+  "Некорректная фамилия": "Incorrect last name",
+  "Некорректное имя": "Incorrect first name",
+  "Нет данных": "No Data"
 }
