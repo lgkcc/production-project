@@ -12,6 +12,7 @@ interface InputProps extends HTMLInputProps {
     onChange?: (value: string) => void;
     autofocus?: boolean;
     readonly?: boolean;
+    number?: boolean;
 }
 
 export const Input = memo((props: InputProps) => {
@@ -23,6 +24,7 @@ export const Input = memo((props: InputProps) => {
         placeholder,
         autofocus,
         readonly,
+        number,
         ...otherProps
     } = props;
     const ref = useRef<HTMLInputElement>(null);
@@ -39,8 +41,15 @@ export const Input = memo((props: InputProps) => {
     }, [autofocus]);
 
     const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        onChange?.(e.target.value);
-        setCaretPosition(e.target.value.length);
+        if (number) {
+            if (!Number.isNaN(+e.target.value)) {
+                onChange?.(e.target.value);
+                setCaretPosition(e.target.value.length);
+            }
+        } else {
+            onChange?.(e.target.value);
+            setCaretPosition(e.target.value.length);
+        }
     };
 
     const onBlur = () => {

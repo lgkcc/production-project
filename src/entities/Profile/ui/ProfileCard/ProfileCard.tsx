@@ -98,6 +98,7 @@ export const ProfileCard = (props: ProfileCardProps) => {
                     className={cls.input}
                     onChange={onChangeAge}
                     readonly={readonly}
+                    number
                 />
                 <Input
                     value={data?.city}
