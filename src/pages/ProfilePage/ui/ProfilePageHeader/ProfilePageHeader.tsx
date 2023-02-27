@@ -3,7 +3,9 @@ import { Text } from 'shared/ui/Text/Text';
 import { Button, ButtonTheme } from 'shared/ui/Button/Button';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProfileReadonly, profileActions, updateProfileData } from 'entities/Profile';
+import {
+    getProfileError, getProfileIsLoading, getProfileReadonly, profileActions, updateProfileData,
+} from 'entities/Profile';
 import { useCallback } from 'react';
 import { useAppDispatch } from 'shared/lib/hooks/useAppDispatch/useAppDispatch';
 import cls from './ProfilePageHeader.module.scss';
@@ -20,6 +22,8 @@ export const ProfilePageHeader = (props: ProfilePageHeaderProps) => {
     const { t } = useTranslation('profile');
 
     const readonly = useSelector(getProfileReadonly);
+    const serverError = useSelector(getProfileError);
+    const isLoading = useSelector(getProfileIsLoading);
     const dispatch = useAppDispatch();
 
     const onEdit = useCallback(() => {
@@ -43,6 +47,7 @@ export const ProfilePageHeader = (props: ProfilePageHeaderProps) => {
                         className={cls.editBtn}
                         theme={ButtonTheme.OUTLINE}
                         onClick={onEdit}
+                        disabled={!!serverError || isLoading}
                     >
                         {t('Редактировать')}
                     </Button>
