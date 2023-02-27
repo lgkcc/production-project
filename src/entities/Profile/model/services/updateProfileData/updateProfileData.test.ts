@@ -62,7 +62,7 @@ describe('fetchProfileData', () => {
         expect(result.payload).toEqual([ValidateProfileError.NO_DATA]);
     });
 
-    test('error login', async () => {
+    test('server error', async () => {
         const thunk = new TestAsyncThunk(updateProfileData, {
             profile: {
                 form: formValue,

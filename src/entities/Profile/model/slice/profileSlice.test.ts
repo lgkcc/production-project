@@ -1,130 +1,48 @@
 import { Currency } from 'entities/Currency';
 import { Country } from 'entities/Country';
+import { updateProfileData } from '../services/updateProfileData/updateProfileData';
 import { profileActions, profileReducer } from './profileSlice';
 import { ProfileSchema, ValidateProfileError } from '../types/profile';
 
 describe('profileSlice.test', () => {
     test('setReadonly', () => {
-        const state: ProfileSchema = {
-            form: {
-                first: 'alexander',
-                lastname: 'lgkcc',
-                age: 21,
-                currency: Currency.RUB,
-                country: Country.Russia,
-                city: 'Yurga',
-                username: 'lgkcc',
-                avatar: 'avatar',
-            },
-            isLoading: false,
-            data: {
-                first: 'alexander',
-                lastname: 'lgkcc',
-                age: 200,
-                currency: Currency.RUB,
-                country: Country.Russia,
-                city: 'Yurga',
-                username: 'lgkcc',
-                avatar: 'avatar',
-            },
+        const state: DeepPartial<ProfileSchema> = {
             readonly: false,
-            validateError: [ValidateProfileError.INCORRECT_AGE],
         };
         expect(
-            profileReducer(state, profileActions.setReadonly(true)),
+            profileReducer(state as ProfileSchema, profileActions.setReadonly(true)),
         ).toEqual({
-            form: {
-                first: 'alexander',
-                lastname: 'lgkcc',
-                age: 21,
-                currency: Currency.RUB,
-                country: Country.Russia,
-                city: 'Yurga',
-                username: 'lgkcc',
-                avatar: 'avatar',
-            },
-            isLoading: false,
-            data: {
-                first: 'alexander',
-                lastname: 'lgkcc',
-                age: 200,
-                currency: Currency.RUB,
-                country: Country.Russia,
-                city: 'Yurga',
-                username: 'lgkcc',
-                avatar: 'avatar',
-            },
             readonly: true,
-            validateError: undefined,
         });
     });
     test('updateProfile', () => {
-        const state: ProfileSchema = {
+        const state: DeepPartial<ProfileSchema> = {
             form: {
                 first: 'alexander',
-                lastname: 'lgkcc',
-                age: 21,
-                currency: Currency.RUB,
-                country: Country.Russia,
-                city: 'Yurga',
-                username: 'lgkcc',
-                avatar: 'avatar',
+                age: 20,
             },
-            isLoading: false,
-            data: {
-                first: 'alexander',
-                lastname: 'lgkcc',
-                age: 200,
-                currency: Currency.RUB,
-                country: Country.Russia,
-                city: 'Yurga',
-                username: 'lgkcc',
-                avatar: 'avatar',
-            },
-            readonly: false,
-            validateError: [ValidateProfileError.INCORRECT_AGE],
         };
         expect(
-            profileReducer(state, profileActions.updateProfile({ age: 21, first: 'lgkcc' })),
+            profileReducer(state as ProfileSchema, profileActions.updateProfile({ age: 21, first: 'lgkcc' })),
         ).toEqual({
             form: {
                 first: 'lgkcc',
-                lastname: 'lgkcc',
                 age: 21,
-                currency: Currency.RUB,
-                country: Country.Russia,
-                city: 'Yurga',
-                username: 'lgkcc',
-                avatar: 'avatar',
             },
-            isLoading: false,
-            data: {
-                first: 'alexander',
-                lastname: 'lgkcc',
-                age: 200,
-                currency: Currency.RUB,
-                country: Country.Russia,
-                city: 'Yurga',
-                username: 'lgkcc',
-                avatar: 'avatar',
-            },
-            readonly: false,
-            validateError: [ValidateProfileError.INCORRECT_AGE],
         });
     });
     test('cancelEdit', () => {
-        const state: ProfileSchema = {
+        const state: DeepPartial<ProfileSchema> = {
             form: {
-                first: 'alexander',
-                lastname: 'lgkcc',
-                age: 21,
+                first: 'ewfwe',
+                lastname: 'wegewg',
+                age: 1243,
                 currency: Currency.RUB,
                 country: Country.Russia,
-                city: 'Yurga',
+                city: 'weg',
                 username: 'lgkcc',
                 avatar: 'avatar',
             },
-            isLoading: false,
             data: {
                 first: 'alexander',
                 lastname: 'lgkcc',
@@ -135,11 +53,9 @@ describe('profileSlice.test', () => {
                 username: 'lgkcc',
                 avatar: 'avatar',
             },
-            readonly: false,
-            validateError: [ValidateProfileError.INCORRECT_AGE],
         };
         expect(
-            profileReducer(state, profileActions.cancelEdit()),
+            profileReducer(state as ProfileSchema, profileActions.cancelEdit()),
         ).toEqual({
             form: {
                 first: 'alexander',
@@ -151,7 +67,6 @@ describe('profileSlice.test', () => {
                 username: 'lgkcc',
                 avatar: 'avatar',
             },
-            isLoading: false,
             data: {
                 first: 'alexander',
                 lastname: 'lgkcc',
@@ -162,8 +77,69 @@ describe('profileSlice.test', () => {
                 username: 'lgkcc',
                 avatar: 'avatar',
             },
-            readonly: true,
             validateError: undefined,
+            readonly: true,
+        });
+    });
+    test('updateProfileData Pending', () => {
+        const state: DeepPartial<ProfileSchema> = {
+            isLoading: false,
+        };
+        expect(
+            profileReducer(state as ProfileSchema, updateProfileData.pending),
+        ).toEqual({
+            isLoading: true,
+            error: undefined,
+            validateError: undefined,
+        });
+    });
+    test('updateProfileData Rejected Server Error', () => {
+        const state: DeepPartial<ProfileSchema> = {
+            isLoading: true,
+        };
+        expect(
+            profileReducer(state as ProfileSchema, updateProfileData.rejected(new Error(), '', undefined, [ValidateProfileError.SERVER_ERROR])),
+        ).toEqual({
+            isLoading: false,
+            error: ValidateProfileError.SERVER_ERROR,
+            validateError: undefined,
+        });
+    });
+    test('updateProfileData Rejected Validate Error', () => {
+        const state: DeepPartial<ProfileSchema> = {
+            isLoading: true,
+        };
+        expect(
+            profileReducer(state as ProfileSchema, updateProfileData.rejected(new Error(), '', undefined, [ValidateProfileError.INCORRECT_AGE, ValidateProfileError.INCORRECT_LAST])),
+        ).toEqual({
+            isLoading: false,
+            error: undefined,
+            validateError: [ValidateProfileError.INCORRECT_AGE, ValidateProfileError.INCORRECT_LAST],
+        });
+    });
+    test('updateProfileData fulfilled', () => {
+        const data = {
+            first: 'alexander',
+            lastname: 'lgkcc',
+            age: 200,
+            currency: Currency.RUB,
+            country: Country.Russia,
+            city: 'Yurga',
+            username: 'lgkcc',
+            avatar: 'avatar',
+        };
+        const state: DeepPartial<ProfileSchema> = {
+            isLoading: true,
+        };
+        expect(
+            profileReducer(state as ProfileSchema, updateProfileData.fulfilled(data, '')),
+        ).toEqual({
+            isLoading: false,
+            readonly: true,
+            error: undefined,
+            validateError: undefined,
+            data,
+            form: data,
         });
     });
 });
